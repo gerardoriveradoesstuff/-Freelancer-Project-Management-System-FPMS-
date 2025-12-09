@@ -4,7 +4,7 @@ function seedEvelyn(callback) {
   db.serialize(() => {
     db.run(
       `INSERT INTO Users (FullName, Email, Password, Role) VALUES (?, ?, ?, ?)`,
-      ["Evelyn Park", "evelyn@class.test", "demo", "client"],
+      ["Evelyn Park", "evelyn.park@gmail.com", "demo", "client"],
       function () {
         db.get(`SELECT Id FROM Users WHERE FullName = ?`, ["Evelyn Park"], (e, c) => {
           if (!c) return callback();
@@ -254,6 +254,26 @@ exports.createTaskDemo = (req, res) => {
   });
 };
 
+exports.updateTaskPriorityStatusDemo = (req, res) => {
+  const taskId = Number(req.body?.taskId);
+  const priority = req.body?.priority;
+  const status = req.body?.status;
+  console.log(`[Task] update request taskId=${taskId} priority=${priority || ''} status=${status || ''}`);
+  if (!taskId) return res.status(400).json({ message: "taskId required" });
+  if (!priority && !status) return res.status(400).json({ message: "No fields to update" });
+  const fields = [];
+  const values = [];
+  if (priority) { fields.push("priority = ?"); values.push(priority); }
+  if (status) { fields.push("Status = ?"); values.push(status); }
+  values.push(taskId);
+  const sql = `UPDATE Task SET ${fields.join(", ")} WHERE Task_Id = ?`;
+  db.run(sql, values, function (err) {
+    if (err) return res.status(400).json({ message: "Update failed" });
+    console.log(`[Task] updated taskId=${taskId} changes=${this.changes}`);
+    res.json({ updated: this.changes });
+  });
+};
+
 exports.updateTaskStatusDemo = (req, res) => {
   db.get(`SELECT Id FROM Users WHERE FullName = ?`, ["Evelyn Park"], (e, c) => {
     if (!c) return res.status(400).json({ message: "Client not found" });
@@ -335,6 +355,38 @@ exports.createPaymentDemo = (req, res) => {
           );
         }
       );
+    });
+  });
+};
+
+exports.seedEvelynMessages = (req, res) => {
+  db.get(`SELECT Id FROM Users WHERE FullName = ?`, ["Evelyn Park"], (eC, c) => {
+    if (!c) return res.status(400).json({ message: "Client not found" });
+    db.get(`SELECT Id FROM Users WHERE Email='alex@demo.test'`, (eA, alex) => {
+      db.get(`SELECT Id FROM Users WHERE Email='priya@demo.test'`, (eP, priya) => {
+        db.get(`SELECT Id FROM Project WHERE Title='Website Redesign' AND Client_id=?`, [c.Id], (e1, p1) => {
+          db.get(`SELECT Id FROM Project WHERE Title='Client Portal Upgrade' AND Client_id=?`, [c.Id], (e2, p2) => {
+            let inserted = 0;
+            db.serialize(() => {
+              if (alex && p1) {
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Hey Alex, can you share the latest mockups?', 0)`, [c.Id, alex.Id, p1.Id], function(){ inserted += this.changes; });
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Sure, uploading now. Do you prefer dark header?', 0)`, [alex.Id, c.Id, p1.Id], function(){ inserted += this.changes; });
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Dark header sounds good. Add CTA on hero.', 1)`, [c.Id, alex.Id, p1.Id], function(){ inserted += this.changes; });
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Got it. I will push updated homepage by EOD.', 1)`, [alex.Id, c.Id, p1.Id], function(){ inserted += this.changes; });
+              }
+              if (priya && p2) {
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Priya, auth flow needs password reset.', 0)`, [c.Id, priya.Id, p2.Id], function(){ inserted += this.changes; });
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Acknowledged. I will add reset + email.', 0)`, [priya.Id, c.Id, p2.Id], function(){ inserted += this.changes; });
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Please extend the deadline by 3 days.', 1)`, [c.Id, priya.Id, p2.Id], function(){ inserted += this.changes; });
+                db.run(`INSERT OR IGNORE INTO Message (sender_id, receiver_id, project_id, Content, is_read) VALUES (?, ?, ?, 'Extended. Added note to tasks.', 1)`, [priya.Id, c.Id, p2.Id], function(){ inserted += this.changes; });
+              }
+            });
+            setTimeout(() => {
+              res.json({ inserted });
+            }, 50);
+          });
+        });
+      });
     });
   });
 };

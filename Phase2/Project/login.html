@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - Freelancer Project Management System</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: '#6a0f0f', brandLight: '#ffe9b3', brandDark: '#4a0b0b', base: '#fffaf0' } } } };</script>
 </head>
 <body>
 
@@ -12,7 +14,7 @@
 <header class="main-header">
 <div class="container">
 <div class="logo">
-<img src="https" alt="Logo"> <span>Freelancer Project<br>Management System</span>
+<img src="assets/logo.svg" alt="Logo"> <span>Freelancer Project<br>Management System</span>
 </div>
 </div>
 </header>
@@ -22,16 +24,16 @@
 <section class="auth-section">
 <div class="container auth-container">
 <h2>Login to Your Account</h2>
-<form action="/api/users/login-simple" method="POST" class="auth-form">
+<form action="/api/users/login-simple" method="POST" class="auth-form max-w-md mx-auto">
 <label for="email">Email</label>
-<input type="email" id="email" name="email" placeholder="Enter your email" required>
+<input type="email" id="email" name="email" placeholder="Enter your email" required class="border border-brand rounded px-3 py-2 w-full">
 
 
 <label for="password">Password</label>
-<input type="password" id="password" name="password" placeholder="Enter your password" required>
+<input type="password" id="password" name="password" placeholder="Enter your password" required class="border border-brand rounded px-3 py-2 w-full">
 
 
-<button type="submit" class="btn btn-primary">Login</button>
+<button type="submit" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Login</button>
 </form>
 <p>Don't have an account? <a href="register.html">Register here</a></p>
 </div>
@@ -46,7 +48,8 @@ document.querySelector('.auth-form')?.addEventListener('submit', async function(
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   try {
-    const res = await fetch('/api/users/login-simple', {
+    const API_BASE = location.origin.startsWith('http') ? '' : 'http://localhost:5000';
+    const res = await fetch(`${API_BASE}/api/users/login-simple`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -54,7 +57,7 @@ document.querySelector('.auth-form')?.addEventListener('submit', async function(
     const data = await res.json();
     if (res.ok) {
       localStorage.setItem('fpms_user', JSON.stringify(data.user));
-      location.href = '/dashboard.html';
+      location.href = `${API_BASE}/dashboard.html`;
     } else {
       alert(data.message || 'Login failed');
     }
