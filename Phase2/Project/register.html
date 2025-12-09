@@ -22,7 +22,7 @@
 <section class="auth-section">
 <div class="container auth-container">
 <h2>Create a New Account</h2>
-<form action="/register" method="POST" class="auth-form">
+<form action="/api/users/register-simple" method="POST" class="auth-form">
 <label for="fullname">Full Name</label>
 <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
 
@@ -51,4 +51,39 @@
 
 
 </body>
+<script>
+document.querySelector('.auth-form')?.addEventListener('submit', async function(e){
+  e.preventDefault();
+  const fullName = document.getElementById('fullname').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const role = document.getElementById('role').value;
+  try {
+    const r = await fetch('/api/users/register-simple', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fullname: fullName, email, password, role })
+    });
+    const reg = await r.json();
+    if (!r.ok) {
+      alert(reg.message || 'Registration failed');
+      return;
+    }
+    const l = await fetch('/api/users/login-simple', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await l.json();
+    if (l.ok) {
+      localStorage.setItem('fpms_user', JSON.stringify(data.user));
+      location.href = '/dashboard.html';
+    } else {
+      alert(data.message || 'Auto login failed');
+    }
+  } catch (err) {
+    alert('Network error');
+  }
+});
+</script>
 </html>
