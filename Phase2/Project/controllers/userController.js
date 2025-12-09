@@ -2,6 +2,9 @@ const db = require("../db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { jwtSecret, jwtExpire } = require("../config");
+const crypto = require("crypto");
+let resetColumnsEnsured = false;
+const resetRateLimit = new Map();
 
 exports.register = (req, res) => {
     const { fullName, email, password, role } = req.body;
@@ -71,5 +74,55 @@ exports.loginSimple = (req, res) => {
         if (!user) return res.status(400).json({ message: "User not found" });
         if (user.Password !== password) return res.status(400).json({ message: "Wrong password" });
         res.json({ message: "Logged in", user: { id: user.Id, fullName: user.FullName, role: user.Role } });
+    });
+};
+
+exports.resetPasswordSimple = (req, res) => {
+    const email = req.body.email;
+    const newPassword = req.body.newPassword;
+
+    db.run(`UPDATE Users SET Password = ? WHERE Email = ?`, [newPassword, email], function (err) {
+        if (err) return res.status(400).json({ message: "Reset failed" });
+        if (this.changes === 0) return res.status(404).json({ message: "Email not found" });
+        res.json({ message: "Password updated" });
+    });
+};
+
+function ensureResetColumns(next) {
+    if (resetColumnsEnsured) return next();
+    db.run(`ALTER TABLE Users ADD COLUMN ResetToken TEXT`, () => {
+        db.run(`ALTER TABLE Users ADD COLUMN ResetExpires INTEGER`, () => {
+            resetColumnsEnsured = true;
+            next();
+        });
+    });
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").toLowerCase());
+}
+
+exports.requestPasswordReset = (req, res) => {
+    const email = String(req.body.email || "").trim().toLowerCase();
+    if (!isValidEmail(email)) {
+        return res.status(400).json({ message: "If an account exists, you'll receive an email" });
+    }
+    const now = Date.now();
+    const windowMs = 60 * 60 * 1000;
+    const maxAttempts = 3;
+    const entry = resetRateLimit.get(email) || [];
+    const recent = entry.filter(ts => now - ts < windowMs);
+    if (recent.length >= maxAttempts) {
+        return res.status(429).json({ message: "If an account exists, you'll receive an email" });
+    }
+    recent.push(now);
+    resetRateLimit.set(email, recent);
+    ensureResetColumns(() => {
+        const token = crypto.randomBytes(32).toString("hex");
+        const expires = now + 30 * 60 * 1000;
+        db.run(`UPDATE Users SET ResetToken = ?, ResetExpires = ? WHERE Email = ?`, [token, expires, email], function (err) {
+            if (err) return res.status(500).json({ message: "If an account exists, you'll receive an email" });
+            return res.json({ message: "If an account exists, you'll receive an email" });
+        });
     });
 };

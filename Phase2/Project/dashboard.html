@@ -5,22 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Freelancer Project Management System</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{brand:'#6a0f0f',brandLight:'#ffe9b3',brandDark:'#4a0b0b',base:'#fffaf0'}}}}</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="main-header">
-        <div class="container">
+        <div class="container max-w-[1100px] mx-auto px-5">
             <nav class="navbar">
                 <div class="logo">
-                    <img src="https" alt="Logo"> <span>Freelancer Project<br>Management System</span>
+                    <img src="assets/logo.svg" alt="Logo"> <span>Freelancer Project<br>Management System</span>
                 </div>
                 <div class="nav-links">
-                    <a href="index.html">Home</a>
-                    <a href="login.html">Login</a>
-                    <a href="register.html">Register</a>
-                    <a href="#">Messages</a>
-                    <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+                    <a href="index.html" id="nav-home">Home</a>
+                    <a href="login.html" id="nav-login">Login</a>
+                    <a href="register.html" id="nav-register">Register</a>
+                    <a href="messages.html" id="nav-messages">Messages</a>
+                    <a href="dashboard.html" id="nav-dashboard" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Dashboard</a>
+                    <a href="#" id="nav-logout" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight">Logout</a>
                 </div>
             </nav>
         </div>
@@ -31,7 +34,6 @@
             <div class="container">
                 <div class="header-row">
                     <div>
-                        <h2>Dashboard Overview</h2>
                         <p class="section-subtitle">Logged in as <span class="user-badge"><span class="avatar"></span>Evelyn Park • Client</span></p>
                     </div>
                     <div class="actions">
@@ -41,7 +43,7 @@
                             <option>Completed</option>
                         </select>
                         <input type="text" placeholder="Search projects, tasks, users">
-                        <a href="#" class="btn btn-secondary">Filters</a>
+                        <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight">Filters</a>
                     </div>
                 </div>
             </div>
@@ -77,7 +79,7 @@
                         <div class="panel">
                             <div class="panel-header">
                                 <h3>Projects Overview</h3>
-                                <a href="#" class="btn btn-secondary">View All</a>
+                                <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight" id="view-all-projects">View All</a>
                             </div>
                             <div class="panel-body">
                                 <table class="table">
@@ -97,7 +99,7 @@
                         <div class="panel" style="margin-top: 30px;">
                             <div class="panel-header">
                                 <h3>My Tasks</h3>
-                                <a href="#" class="btn btn-secondary">View All</a>
+                                <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight" id="view-all-tasks">View All</a>
                             </div>
                             <div class="panel-body">
                                 <table class="table">
@@ -120,7 +122,7 @@
                         <div class="panel">
                             <div class="panel-header">
                                 <h3>Recent Messages</h3>
-                                <a href="#" class="btn btn-secondary">Open Inbox</a>
+                                <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight" id="open-inbox">Open Inbox</a>
                             </div>
                             <div class="panel-body">
                                 <ul class="list" id="messages-list"></ul>
@@ -130,7 +132,7 @@
                         <div class="panel" style="margin-top: 30px;">
                             <div class="panel-header">
                                 <h3>Payments</h3>
-                                <a href="#" class="btn btn-secondary">View All</a>
+                                <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight" id="view-all-payments">View All</a>
                             </div>
                             <div class="panel-body">
                                 <ul class="list" id="payments-list"></ul>
@@ -235,7 +237,7 @@
         <div class="container footer-content">
             <div class="footer-about">
                 <div class="logo">
-                     <img src="https" alt="Logo"> <span>Freelancer Project<br>Management System</span>
+                     <img src="assets/logo.svg" alt="Logo"> <span>Freelancer Project<br>Management System</span>
                 </div>
                 <p>Empowering clients and freelancers to collaborate seamlessly on projects worldwide.</p>
                 <div class="social-links"></div>

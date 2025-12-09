@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages - Freelancer Project Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { brand: '#6a0f0f', brandLight: '#ffe9b3', brandDark: '#4a0b0b', base: '#fffaf0' } } } };</script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script defer src="messages.js"></script>
+</head>
+<body>
+  <header class="main-header">
+    <div class="container max-w-[1100px] mx-auto px-5">
+      <nav class="navbar">
+        <div class="logo">
+          <img src="assets/logo.svg" alt="Logo"> <span>Freelancer Project<br>Management System</span>
+        </div>
+        <div class="nav-links">
+          <a href="index.html" id="nav-home">Home</a>
+          <a href="login.html" id="nav-login">Login</a>
+          <a href="register.html" id="nav-register">Register</a>
+          <a href="messages.html" id="nav-messages" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight">Messages</a>
+          <a href="dashboard.html" id="nav-dashboard" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Dashboard</a>
+          <a href="#" id="nav-logout" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight">Logout</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="dashboard-header">
+      <div class="container">
+        <div class="header-row">
+          <div>
+            <h2>Messages</h2>
+            <p class="section-subtitle">Logged in as <span class="user-badge"><span class="avatar"></span></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-section">
+      <div class="container">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Inbox</h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list" id="messages-list"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-about">
+        <div class="logo">
+          <img src="assets/logo.svg" alt="Logo"> <span>Freelancer Project<br>Management System</span>
+        </div>
+        <p>Empowering clients and freelancers to collaborate seamlessly on projects worldwide.</p>
+        <div class="social-links"></div>
+      </div>
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <a href="index.html">Home</a>
+        <a href="login.html" id="footer-login">Login</a>
+        <a href="register.html" id="footer-register">Register</a>
+        <a href="messages.html">Messages</a>
+      </div>
+      <div class="footer-links">
+        <h3>For Clients</h3>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="#">Project Management</a>
+        <a href="#">Progress Tracking</a>
+        <a href="#">Payments</a>
+      </div>
+      <div class="footer-links">
+        <h3>For Freelancers</h3>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="#">Task Management</a>
+        <a href="#">Work Submission</a>
+        <a href="#">Skills</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2025 Freelancer Project Management System. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Profile</a>
+          <a href="#">Reports</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -3,8 +3,8 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    color: #333;
-    background-color: #fff;
+    color: #3b2a2a;
+    background-color: #fffaf0;
     line-height: 1.6;
 }
 
@@ -25,7 +25,7 @@ h1 {
 }
 
 h1 strong {
-    color: #007BFF;
+    color: #6a0f0f;
 }
 
 h2 {
@@ -35,7 +35,7 @@ h2 {
 }
 
 h2 strong {
-    color: #007BFF;
+    color: #6a0f0f;
 }
 
 p {
@@ -45,7 +45,7 @@ p {
 
 a {
     text-decoration: none;
-    color: #007BFF;
+    color: #6a0f0f;
 }
 
 /* --- Buttons & Tags --- */
@@ -58,12 +58,12 @@ a {
 }
 
 .btn-primary {
-    background-color: #007BFF;
+    background-color: #6a0f0f;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #4a0b0b;
 }
 
 .btn-secondary {
@@ -78,7 +78,7 @@ a {
 
 .btn-white {
     background-color: #fff;
-    color: #007BFF;
+    color: #6a0f0f;
 }
 
 .btn-outline-white {
@@ -90,8 +90,8 @@ a {
 .tagline {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #007BFF;
-    background-color: #e6f2ff;
+    color: #6a0f0f;
+    background-color: #ffe9b3;
     padding: 6px 12px;
     border-radius: 20px;
     display: inline-block;
@@ -100,8 +100,8 @@ a {
 
 /* --- Header & Navigation --- */
 .main-header {
-    background-color: #fff;
-    border-bottom: 1px solid #e0e0e0;
+    background-color: #fff6d6;
+    border-bottom: 1px solid #ead7a5;
     padding: 15px 0;
 }
 
@@ -119,9 +119,8 @@ a {
 }
 
 .logo img {
-    height: 40px; /* Placeholder */
-    width: 40px; /* Placeholder */
-    background: #eee; /* Placeholder */
+    height: 40px;
+    width: 40px;
     margin-right: 10px;
 }
 
@@ -132,7 +131,7 @@ a {
 }
 
 .nav-links a:hover {
-    color: #007BFF;
+    color: #6a0f0f;
 }
 
 .nav-links .btn {
@@ -143,7 +142,7 @@ a {
 /* --- Hero Section --- */
 .hero-section {
     padding: 60px 0;
-    background-color: #f8f9fa;
+    background-color: #fff3c4;
 }
 
 .hero-content {
@@ -215,7 +214,7 @@ a {
     height: 50px;
     border-radius: 8px;
 }
-.icon-placeholder-blue { background-color: #007BFF; }
+.icon-placeholder-blue { background-color: #6a0f0f; }
 .icon-placeholder-green { background-color: #28a745; }
 .icon-placeholder-yellow { background-color: #ffc107; }
 .icon-placeholder-red { background-color: #dc3545; }
@@ -256,8 +255,8 @@ a {
 .info-text .tagline-blue {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #007BFF;
-    background-color: #e6f2ff;
+    color: #6a0f0f;
+    background-color: #ffe9b3;
     padding: 6px 12px;
     border-radius: 20px;
     display: inline-block;
@@ -278,7 +277,7 @@ a {
 
 /* --- CTA Section --- */
 .cta-section {
-    background-color: #007BFF;
+    background-color: #6a0f0f;
     color: #fff;
     padding: 60px 0;
     text-align: center;
@@ -290,7 +289,7 @@ a {
 }
 
 .cta-section p {
-    color: #e6f2ff;
+    color: #ffe9b3;
     max-width: 600px;
     margin: 0 auto 30px auto;
 }
@@ -311,8 +310,8 @@ a {
 
 /* --- Footer --- */
 .main-footer {
-    background-color: #222;
-    color: #ccc;
+    background-color: #4a0b0b;
+    color: #f4e6c3;
     padding-top: 50px;
 }
 
@@ -355,7 +354,7 @@ a {
 }
 
 .footer-links a:hover {
-    color: #fff;
+    color: #ffe9b3;
 }
 
 .footer-bottom {
@@ -522,7 +521,7 @@ a {
     font-size: 0.85rem;
 }
 
-.status-active { background-color: #e6f2ff; color: #007BFF; }
+.status-active { background-color: #ffe9b3; color: #6a0f0f; }
 .status-todo { background-color: #fff3cd; color: #856404; }
 .status-progress { background-color: #e6f7ec; color: #28a745; }
 .status-done { background-color: #e6f7ec; color: #28a745; }
@@ -562,8 +561,8 @@ a {
     gap: 10px;
     padding: 8px 12px;
     border-radius: 20px;
-    background-color: #e6f2ff;
-    color: #007BFF;
+    background-color: #ffe9b3;
+    color: #6a0f0f;
     font-weight: 500;
 }
 
@@ -571,5 +570,5 @@ a {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background-color: #007BFF;
+    background-color: #6a0f0f;
 }
