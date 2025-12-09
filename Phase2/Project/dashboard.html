@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Freelancer Project Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="https" alt="Logo"> <span>Freelancer Project<br>Management System</span>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                    <a href="#">Messages</a>
+                    <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="dashboard-header">
+            <div class="container">
+                <div class="header-row">
+                    <div>
+                        <h2>Dashboard Overview</h2>
+                        <p class="section-subtitle">Logged in as <span class="user-badge"><span class="avatar"></span>Evelyn Park • Client</span></p>
+                    </div>
+                    <div class="actions">
+                        <select>
+                            <option>All Projects</option>
+                            <option>Active</option>
+                            <option>Completed</option>
+                        </select>
+                        <input type="text" placeholder="Search projects, tasks, users">
+                        <a href="#" class="btn btn-secondary">Filters</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <div class="container">
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="value" id="stat-active-projects">2</div>
+                        <div class="label">Active Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="stat-tasks-in-progress">5</div>
+                        <div class="label">Tasks In Progress</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="stat-unread-messages">1</div>
+                        <div class="label">Unread Messages</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="stat-pending-payments">$450</div>
+                        <div class="label">Pending Payments</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="container">
+                <div class="dashboard-grid">
+                    <div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3>Projects Overview</h3>
+                                <a href="#" class="btn btn-secondary">View All</a>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Project</th>
+                                            <th>Status</th>
+                                            <th>Deadline</th>
+                                            <th class="text-right">Progress</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="projects-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="margin-top: 30px;">
+                            <div class="panel-header">
+                                <h3>My Tasks</h3>
+                                <a href="#" class="btn btn-secondary">View All</a>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Task</th>
+                                            <th>Project</th>
+                                            <th>Priority</th>
+                                            <th>Status</th>
+                                            <th>Deadline</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tasks-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3>Recent Messages</h3>
+                                <a href="#" class="btn btn-secondary">Open Inbox</a>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list" id="messages-list"></ul>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="margin-top: 30px;">
+                            <div class="panel-header">
+                                <h3>Payments</h3>
+                                <a href="#" class="btn btn-secondary">View All</a>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list" id="payments-list"></ul>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="margin-top: 30px;">
+                            <div class="panel-header">
+                                <h3>Quick Actions</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="chip-group">
+                                    <a href="#" class="chip" id="qa-create-project">Create Project</a>
+                                    <a href="#" class="chip" id="qa-add-freelancer">Add Freelancer</a>
+                                    <a href="#" class="chip" id="qa-create-task">Create Task</a>
+                                    <a href="#" class="chip" id="qa-update-task-status">Update Task Status</a>
+                                    <a href="#" class="chip" id="qa-send-message">Send Message</a>
+                                    <a href="#" class="chip" id="qa-mark-message-read">Mark Message Read</a>
+                                    <a href="#" class="chip" id="qa-create-payment">Create Payment</a>
+                                    <a href="#" class="chip" id="qa-view-reports">View Reports</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="features-section">
+            <div class="container">
+                <h2>Actions</h2>
+                <p class="section-subtitle">Select an action to manage users, projects, tasks, payments, and reports.</p>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Quick Queries</h3>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn btn-secondary">List All Users</a>
+                            <a href="#" class="btn btn-secondary">Get All Freelancers</a>
+                            <a href="#" class="btn btn-secondary">Projects by Client</a>
+                            <a href="#" class="btn btn-secondary">Tasks by Project</a>
+                            <a href="#" class="btn btn-secondary">Messages in Project</a>
+                            <a href="#" class="btn btn-secondary">Payments by Freelancer</a>
+                            <a href="#" class="btn btn-secondary">Reviews for Freelancer</a>
+                            <a href="#" class="btn btn-secondary">Task Count per Project</a>
+                            <a href="#" class="btn btn-secondary">Average Client Ratings</a>
+                            <a href="#" class="btn btn-secondary">Projects with ≥ 3 Tasks</a>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>User Management</h3>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn btn-primary">Insert Demo Client</a>
+                            <a href="#" class="btn btn-primary">Insert Demo Freelancer</a>
+                            <a href="#" class="btn btn-primary">Create Demo Project</a>
+                            <a href="#" class="btn btn-primary">Add Freelancer to Project</a>
+                            <a href="#" class="btn btn-secondary">Delete Demo User</a>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Project Management</h3>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn btn-primary">Create Task</a>
+                            <a href="#" class="btn btn-primary">Update Task Status</a>
+                            <a href="#" class="btn btn-primary">Send Message</a>
+                            <a href="#" class="btn btn-primary">Mark Message as Read</a>
+                            <a href="#" class="btn btn-primary">Create Pending Payment</a>
+                            <a href="#" class="btn btn-secondary">Delete Kickoff Message</a>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Reports</h3>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn btn-secondary">Freelancer Task Assignments</a>
+                            <a href="#" class="btn btn-secondary">Projects Member Count</a>
+                            <a href="#" class="btn btn-secondary">Team Skills per Project</a>
+                            <a href="#" class="btn btn-secondary">High Priority Todo Tasks</a>
+                            <a href="#" class="btn btn-secondary">Clients with Unread Messages</a>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Automation</h3>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn btn-primary">Assign by Required Skill</a>
+                            <a href="#" class="btn btn-primary">Create Project + Default Tasks</a>
+                            <a href="#" class="btn btn-primary">Send Message + Mark Read</a>
+                            <a href="#" class="btn btn-primary">Complete Project + Pay</a>
+                            <a href="#" class="btn btn-primary">Pay Only Completed Tasks</a>
+                            <a href="#" class="btn btn-secondary">Remove Inactive Freelancers</a>
+                            <a href="#" class="btn btn-secondary">Alert Overdue Task</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-about">
+                <div class="logo">
+                     <img src="https" alt="Logo"> <span>Freelancer Project<br>Management System</span>
+                </div>
+                <p>Empowering clients and freelancers to collaborate seamlessly on projects worldwide.</p>
+                <div class="social-links"></div>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+                <a href="#">Messages</a>
+            </div>
+            <div class="footer-links">
+                <h3>For Clients</h3>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="#">Project Management</a>
+                <a href="#">Progress Tracking</a>
+                <a href="#">Payments</a>
+            </div>
+            <div class="footer-links">
+                <h3>For Freelancers</h3>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="#">Task Management</a>
+                <a href="#">Work Submission</a>
+                <a href="#">Skills</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Freelancer Project Management System. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Profile</a>
+                    <a href="#">Reports</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+<script src="dashboard.js"></script>
+</html>

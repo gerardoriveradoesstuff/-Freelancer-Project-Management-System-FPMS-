@@ -1,6 +1,6 @@
 PRAGMA foreign_keys = ON;
 
-CREATE TABLE Users (
+CREATE TABLE IF NOT EXISTS Users (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     FullName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL UNIQUE,
@@ -8,13 +8,13 @@ CREATE TABLE Users (
     Role TEXT NOT NULL CHECK(Role IN ('client', 'freelancer', 'admin'))
 );
 
-CREATE TABLE Skill (
+CREATE TABLE IF NOT EXISTS Skill (
     Skill_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     Name VARCHAR(255) NOT NULL UNIQUE,
     Description VARCHAR(1000)
 );
 
-CREATE TABLE Project (
+CREATE TABLE IF NOT EXISTS Project (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     Title VARCHAR(255) NOT NULL,
     Description TEXT,
@@ -24,7 +24,7 @@ CREATE TABLE Project (
     FOREIGN KEY (Client_id) REFERENCES Users(Id) ON DELETE SET NULL
 );
 
-CREATE TABLE User_Skill (
+CREATE TABLE IF NOT EXISTS User_Skill (
     user_id INT,
     skill_id INT,
     PRIMARY KEY (user_id, skill_id),
@@ -32,7 +32,7 @@ CREATE TABLE User_Skill (
     FOREIGN KEY (skill_id) REFERENCES Skill(Skill_Id) ON DELETE CASCADE
 );
 
-CREATE TABLE Task (
+CREATE TABLE IF NOT EXISTS Task (
     Task_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INT NOT NULL,
     title VARCHAR(100) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE Task (
     FOREIGN KEY (project_id) REFERENCES Project(Id) ON DELETE CASCADE
 );
 
-CREATE TABLE Project_Member (
+CREATE TABLE IF NOT EXISTS Project_Member (
     member_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INT NOT NULL,
     project_id INT NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE Project_Member (
     UNIQUE (user_id, project_id)
 );
 
-CREATE TABLE Message (
+CREATE TABLE IF NOT EXISTS Message (
     message_id INTEGER PRIMARY KEY AUTOINCREMENT,
     sender_id INT NOT NULL,
     receiver_id INT NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE Message (
     FOREIGN KEY (project_id) REFERENCES Project(Id) ON DELETE SET NULL
 );
 
-CREATE TABLE Payment (
+CREATE TABLE IF NOT EXISTS Payment (
     Payment_id INTEGER PRIMARY KEY AUTOINCREMENT,
     Title VARCHAR(255),
     Description TEXT,
@@ -82,7 +82,7 @@ CREATE TABLE Payment (
     FOREIGN KEY (project_id) REFERENCES Project(Id) ON DELETE SET NULL
 );
 
-CREATE TABLE Review (
+CREATE TABLE IF NOT EXISTS Review (
     review_id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INT NOT NULL,
     reviewer_id INT NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE Review (
     FOREIGN KEY (reviewee_id) REFERENCES Users(Id) ON DELETE CASCADE
 );
 
-CREATE TABLE Task_Assignment (
+CREATE TABLE IF NOT EXISTS Task_Assignment (
   user_id INT,
   task_id INT,
   assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
