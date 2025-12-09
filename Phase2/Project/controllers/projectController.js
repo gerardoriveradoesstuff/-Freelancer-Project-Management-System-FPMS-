@@ -1,27 +1,27 @@
-const db = require("../db");
+const db = require('../db');
 
 exports.createProject = (req, res) => {
-    const { title, description, deadline } = req.body;
-    const clientId = req.user.id;
+    const { title, description, deadline, clientId } = req.body;
 
-    const sql = `INSERT INTO Project (Title, Description, Client_id, Deadline) 
-                 VALUES (?, ?, ?, ?)`;
+    db.run('INSERT INTO Project (Title, Description, Client_id, Deadline, Status) VALUES (?, ?, ?, ?, ?)', [title, description, clientId, deadline, 'active'], function(err) {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        const projectId = this.lastID;
+        const tasks = [
+            { title: 'Planning', description: 'Plan project phases', deadline: deadline },
+            { title: 'Development', description: 'Code features', deadline: deadline },
+            { title: 'Testing', description: 'Test complete system', deadline: deadline }
+        ];
 
-    db.run(sql, [title, description, clientId, deadline], function (err) {
-        if (err) return res.status(400).json({ message: "Error creating project" });
+        const placeholders = tasks.map(() => '(?, ?, ?, ?)').join(',');
+        const values = tasks.reduce((acc, task) => acc.concat([projectId, task.title, task.description, task.deadline]), []);
 
-        res.json({ projectId: this.lastID, message: "Project created" });
+        db.run(`INSERT INTO Task (project_id, title, Description, Deadline) VALUES ${placeholders}`, values, (err) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ message: 'Project and tasks created successfully', projectId });
+        });
     });
-};
-
-exports.getClientProjects = (req, res) => {
-    db.all(
-        `SELECT * FROM Project WHERE Client_id = ?`,
-        [req.user.id],
-        (err, rows) => res.json(rows)
-    );
-};
-
-exports.getAllProjects = (req, res) => {
-    db.all(`SELECT * FROM Project`, [], (err, rows) => res.json(rows));
 };

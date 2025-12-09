@@ -11,7 +11,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const BASE = location.origin.startsWith('http') ? '' : 'http://localhost:5000';
     let showAllPayments = false;
     let showAllMessages = false;
+    let showAllTasks = false;
     let actionProjectTitle = null;
+    let projectFilter = 'All';
+    let projectSearch = '';
     const navLogin = document.getElementById('nav-login');
     const navRegister = document.getElementById('nav-register');
     const navDashboard = document.getElementById('nav-dashboard');
@@ -62,7 +65,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const projectsBody = document.getElementById("projects-table-body");
       if (projectsBody) {
-        projectsBody.innerHTML = (data.projects || [])
+        let projectsList = (data.projects || []);
+        const f = String(projectFilter || 'All').toLowerCase();
+        if (f === 'active') projectsList = projectsList.filter(p => String(p.Status).toLowerCase() === 'active');
+        else if (f === 'completed') projectsList = projectsList.filter(p => String(p.Status).toLowerCase() === 'completed');
+        const q = String(projectSearch || '').trim().toLowerCase();
+        if (q) projectsList = projectsList.filter(p => String(p.Title || '').toLowerCase().includes(q));
+        projectsBody.innerHTML = projectsList
           .map(
             p => `<tr>
               <td>${p.Title}</td>
@@ -76,7 +85,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const tasksBody = document.getElementById("tasks-table-body");
       if (tasksBody) {
-      tasksBody.innerHTML = (data.tasks || [])
+      const allTasks = (data.tasks || []).slice().sort((a,b)=>{
+        const da = new Date(a.created_at || a.Deadline || 0);
+        const db = new Date(b.created_at || b.Deadline || 0);
+        return db - da;
+      });
+      const visibleTasks = allTasks.slice(0, showAllTasks ? Number.MAX_SAFE_INTEGER : 5);
+      tasksBody.innerHTML = visibleTasks
         .map(
           t => `<tr>
             <td>${t.title}</td>
@@ -116,6 +131,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             await refresh();
           });
         });
+
+        const viewAllTasksBtn = document.getElementById('view-all-tasks');
+        if (viewAllTasksBtn) {
+          viewAllTasksBtn.style.display = allTasks.length > 5 ? '' : 'none';
+          viewAllTasksBtn.textContent = showAllTasks ? 'Collapse' : 'View All';
+        }
       }
 
       const messagesList = document.getElementById("messages-list");
@@ -160,6 +181,65 @@ document.addEventListener("DOMContentLoaded", async () => {
           el.classList.remove("loading");
         }
       });
+    }
+
+    const pf = document.getElementById('project-filter');
+    if (pf) {
+      pf.addEventListener('change', async () => {
+        projectFilter = pf.value || 'All';
+        await refresh();
+      });
+    }
+    const ps = document.getElementById('project-search');
+    if (ps) {
+      ps.addEventListener('input', async () => {
+        projectSearch = ps.value || '';
+        await refresh();
+      });
+    }
+
+    const createProjectBtn = document.getElementById('create-project-btn');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const createProjectModal = document.getElementById('create-project-modal');
+    const createProjectForm = document.getElementById('create-project-form');
+
+    if (createProjectBtn) {
+        createProjectBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            createProjectModal.style.display = 'flex';
+        });
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            createProjectModal.style.display = 'none';
+        });
+    }
+
+    if (createProjectForm) {
+        createProjectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('project-title').value;
+            const description = document.getElementById('project-description').value;
+            const deadline = document.getElementById('project-deadline').value;
+            const user = JSON.parse(localStorage.getItem('fpms_user'));
+
+            if (!user) {
+                alert('You must be logged in to create a project.');
+                return;
+            }
+
+            const clientId = user.id;
+
+            await fetch(`${BASE}/api/projects`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, deadline, clientId })
+            });
+
+            createProjectModal.style.display = 'none';
+            await refresh();
+        });
     }
 
     await refresh();
@@ -211,7 +291,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   bind("view-all-tasks", async () => {
-    document.getElementById('tasks-table-body')?.scrollIntoView({ behavior: 'smooth' });
+    showAllTasks = !showAllTasks;
   });
 
     function log(title, data) {
