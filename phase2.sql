@@ -45,7 +45,102 @@ JOIN Task t ON p.Id = t.project_id
 GROUP BY p.Id
 HAVING COUNT(t.Task_Id) >= 3;
 
+-- USE CASE 1: User Management
+-- 11. Insert a demo client user
+INSERT OR IGNORE INTO Users (FullName, Email, Password, Role)
+VALUES ('Michelle', 'Michelle@test.com', '1234', 'client');
 
+-- 12. Insert a demo freelancer user
+INSERT OR IGNORE INTO Users (FullName, Email, Password, Role)
+VALUES ('Robert', 'Robert@test.com', '1234', 'freelancer');
+
+-- 13. Create a demo project, assign client directly by email once
+INSERT INTO Project (Title, Description, Client_id, Deadline, Status)
+VALUES ('Web Development Project', 'Web Dev project for a client',
+        (SELECT Id FROM Users WHERE Email='Michael@test.com'),
+        DATE('now','+14 day'), 'active');
+
+-- 14. Add freelancer to the demo project 
+INSERT INTO Project_Member (user_id, project_id, role)
+SELECT u.Id, p.Id, 'Contributor'
+FROM Users u, Project p
+WHERE u.Email='Robert@test.com' AND p.Title='Web Development Project'
+  AND NOT EXISTS (
+    SELECT 1 FROM Project_Member pm WHERE pm.user_id = u.Id AND pm.project_id = p.Id
+  );
+
+-- USE CASE 2: Project Management
+-- 15. Create a task for the demo project
+INSERT INTO Task (project_id, title, Description, Deadline, priority, Status)
+SELECT p.Id, 'Set up frontend', 'Do this by installing react', DATE('now','+7 day'), 'High', 'todo'
+FROM Project p
+WHERE p.Title='Web Development Project';
+
+-- 16. Update the task status to in_progress
+UPDATE Task SET Status='in_progress' WHERE title='Set up frontend';
+
+-- 17. Send a message 
+INSERT INTO Message (sender_id, receiver_id, project_id, Content)
+SELECT c.Id, f.Id, p.Id, 'meeting scheduled for tomorrow'
+FROM Users c, Users f, Project p
+WHERE c.Email='Michelle@test.com' AND f.Email='Robert@test.com' AND p.Title='Web Development Project';
+
+-- 18. Mark the message as read
+UPDATE Message
+SET is_read=1
+WHERE Content='meeting scheduled for tomorrow'
+  AND project_id=(SELECT Id FROM Project WHERE Title='Web Development Project');
+
+-- 19. Create a pending payment 
+INSERT INTO Payment (Title, Description, Amount, Client_id, recipient_id, project_id, payment_date, status)
+SELECT 'Milestone 1', 'Initial payment', 250.00,
+       c.Id, f.Id, p.Id, DATE('now'), 'Pending'
+FROM Users c, Users f, Project p
+WHERE c.Email='Michelle@test.com' AND f.Email='Robert@test.com' AND p.Title='Web Development Project';
+
+-- 20. Delete kickoff message for the demo project 
+DELETE FROM Message
+WHERE Content='meeting scheduled for tomorrow'
+  AND project_id=(SELECT Id FROM Project WHERE Title='Web Development Project');
+
+-- 21. Delete Robert@test.com user
+DELETE FROM USER WHERE Email='Robert@test.com';
+
+-- 22. Freelancer's assigned task on which project by which client
+-- Join Tables: Users (f), Task_Assignment (ta), Task (t), Project (p), Users (c)
+-- Use Case: to find the task assigned to each freelancer in each of the clients projects. 
+SELECT f.FullName AS freelancer, t.title AS task_title, p.Title AS project_title, c.FullName AS client_name
+FROM Users f
+JOIN Task_Assignment ta ON ta.user_id = f.Id
+JOIN Task t ON t.Task_Id = ta.task_id
+JOIN Project p ON p.Id = t.project_id
+JOIN Users c ON c.Id = p.Client_id
+WHERE p.Client_id = (SELECT Id FROM Users WHERE FullName = 'Evelyn Park')
+ORDER BY p.Title, t.title;
+
+-- 22. List every project with its client and how many people working on it.
+-- Join Tables: Project (p), Users (c), Project_Member (pm)
+-- Use Case: To find out how many people are working on each project and which client is assigned to each project.
+SELECT p.Title AS project_title, c.FullName AS client_name, COUNT(pm.user_id) AS member_count
+FROM Project p
+JOIN Users c ON c.Id = p.Client_id
+JOIN Project_Member pm ON pm.project_id = p.Id
+WHERE p.Client_id = (SELECT Id FROM Users WHERE FullName = 'Evelyn Park')
+GROUP BY p.Id, p.Title, c.FullName
+ORDER BY p.Title;
+
+-- 23. All users in different or same projects and their skills
+-- Join Tables: Project (p), Project_Member (pm), Users (u), User_Skill (us), Skill (s)
+-- Use Case: For client to find the skills of all the team members in their projects.
+SELECT p.Title AS project_title, u.FullName AS user_name, GROUP_CONCAT(DISTINCT s.Name) AS skills
+FROM Project p
+JOIN Project_Member pm ON pm.project_id = p.Id
+JOIN Users u ON u.Id = pm.user_id
+LEFT JOIN User_Skill us ON us.user_id = u.Id
+LEFT JOIN Skill s ON s.Skill_Id = us.skill_id
+WHERE p.Client_id = (SELECT Id FROM Users WHERE FullName = 'Evelyn Park')
+GROUP BY p.Id, u.Id
+ORDER BY u.FullName;
 
 
 --- Query 1 
