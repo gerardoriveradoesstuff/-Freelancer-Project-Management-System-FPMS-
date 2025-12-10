@@ -78,9 +78,37 @@ document.addEventListener("DOMContentLoaded", async () => {
               <td><span class="status-badge ${p.Status === 'active' ? 'status-active' : p.Status === 'completed' ? 'status-done' : 'status-pending'}">${p.Status}</span></td>
               <td>${p.Deadline || ''}</td>
               <td class="text-right">—</td>
+              <td>
+                <button class="btn btn-secondary border border-brand text-brand hover:bg-brandLight edit-project-btn" data-project-id="${p.Id}">Edit</button>
+                <button class="btn btn-secondary border border-brand text-brand hover:bg-brandLight members-project-btn" data-project-id="${p.Id}" style="margin-left:8px;">Members</button>
+              </td>
             </tr>`
           )
           .join("");
+
+        Array.from(document.querySelectorAll('.edit-project-btn')).forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pid = Number(btn.getAttribute('data-project-id'));
+            selectedProjectId = pid;
+            addMemberModal.style.display = 'flex';
+          });
+        });
+
+        Array.from(document.querySelectorAll('.members-project-btn')).forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const pid = Number(btn.getAttribute('data-project-id'));
+            selectedProjectId = pid;
+            projectMembersModal.style.display = 'flex';
+            const res = await fetch(`${BASE}/api/projects/${pid}/members`);
+            const members = await res.json();
+            const list = document.getElementById('project-members-list');
+            if (list) {
+              list.innerHTML = (members || []).map(m => `<li class="list-item"><span>${m.FullName} • ${m.Email}</span><span class="status-badge">${m.role}</span></li>`).join('');
+            }
+          });
+        });
       }
 
       const tasksBody = document.getElementById("tasks-table-body");
@@ -202,6 +230,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const closeModalBtn = document.getElementById('close-modal-btn');
     const createProjectModal = document.getElementById('create-project-modal');
     const createProjectForm = document.getElementById('create-project-form');
+    const addMemberModal = document.getElementById('add-member-modal');
+    const closeAddMemberBtn = document.getElementById('close-add-member-btn');
+    const addMemberForm = document.getElementById('add-member-form');
+    const memberEmailInput = document.getElementById('member-email');
+    const projectMembersModal = document.getElementById('project-members-modal');
+    const closeProjectMembersBtn = document.getElementById('close-project-members-btn');
+    const projectMembersList = document.getElementById('project-members-list');
+    let selectedProjectId = null;
     const projectEmailLabel = document.getElementById('project-email-label');
     const projectEmailInput = document.getElementById('project-email');
 
@@ -223,6 +259,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         closeModalBtn.addEventListener('click', () => {
             createProjectModal.style.display = 'none';
         });
+    }
+
+    if (closeAddMemberBtn) {
+      closeAddMemberBtn.addEventListener('click', () => {
+        addMemberModal.style.display = 'none';
+      });
+    }
+
+    if (closeProjectMembersBtn) {
+      closeProjectMembersBtn.addEventListener('click', () => {
+        projectMembersModal.style.display = 'none';
+        if (projectMembersList) projectMembersList.innerHTML = '';
+      });
     }
 
      if (createProjectForm) {
@@ -250,9 +299,28 @@ document.addEventListener("DOMContentLoaded", async () => {
          });
 
          createProjectModal.style.display = 'none';
-         await refresh();
-       });
+       await refresh();
+      });
      }
+
+    if (addMemberForm) {
+      addMemberForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const u = JSON.parse(localStorage.getItem('fpms_user') || 'null');
+        const email = memberEmailInput ? memberEmailInput.value : '';
+        if (selectedProjectId && u) {
+          await fetch(`${BASE}/api/projects/${selectedProjectId}/member`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, actorId: u.id })
+          });
+        }
+        addMemberModal.style.display = 'none';
+        selectedProjectId = null;
+        if (memberEmailInput) memberEmailInput.value = '';
+        await refresh();
+      });
+    }
 
     await refresh();
 
