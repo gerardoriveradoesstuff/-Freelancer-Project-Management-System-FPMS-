@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         location.href = `${BASE}/login.html`;
         return { client: {}, stats: {}, projects: [], tasks: [], messages: [], payments: [] };
       }
-      const res = await fetch(`${BASE}/api/demo/user/${user.id}`);
+      const res = await fetch(`${BASE}/api/users/${user.id}/dashboard`);
       return res.json();
     }
 
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
     const ps = document.getElementById('project-search');
-    if (ps) {
+     if (ps) {
       ps.addEventListener('input', async () => {
         projectSearch = ps.value || '';
         await refresh();
@@ -202,6 +202,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const closeModalBtn = document.getElementById('close-modal-btn');
     const createProjectModal = document.getElementById('create-project-modal');
     const createProjectForm = document.getElementById('create-project-form');
+    const projectEmailLabel = document.getElementById('project-email-label');
+    const projectEmailInput = document.getElementById('project-email');
+
+    const currentUser = JSON.parse(localStorage.getItem('fpms_user') || 'null');
+    if (projectEmailLabel && currentUser) {
+      const isClient = String(currentUser.role || '').toLowerCase() === 'client';
+      projectEmailLabel.textContent = isClient ? 'Freelancer Email' : 'Client Email';
+      if (projectEmailInput) projectEmailInput.placeholder = isClient ? 'freelancer@example.com' : 'client@example.com';
+    }
 
     if (createProjectBtn) {
         createProjectBtn.addEventListener('click', (e) => {
@@ -216,31 +225,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    if (createProjectForm) {
-        createProjectForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('project-title').value;
-            const description = document.getElementById('project-description').value;
-            const deadline = document.getElementById('project-deadline').value;
-            const user = JSON.parse(localStorage.getItem('fpms_user'));
+     if (createProjectForm) {
+       createProjectForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+         const email = document.getElementById('project-email').value;
+         const title = document.getElementById('project-title').value;
+         const description = document.getElementById('project-description').value;
+         const deadline = document.getElementById('project-deadline').value;
+         const payload = { title, description, deadline };
+         const u = JSON.parse(localStorage.getItem('fpms_user') || 'null');
+         const isClient = u && String(u.role || '').toLowerCase() === 'client';
+         if (isClient) {
+           payload.clientId = u.id;
+           payload.freelancerEmail = email;
+         } else {
+           payload.clientEmail = email;
+           payload.freelancerId = u ? u.id : undefined;
+         }
 
-            if (!user) {
-                alert('You must be logged in to create a project.');
-                return;
-            }
+         await fetch(`${BASE}/api/projects`, {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify(payload)
+         });
 
-            const clientId = user.id;
-
-            await fetch(`${BASE}/api/projects`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description, deadline, clientId })
-            });
-
-            createProjectModal.style.display = 'none';
-            await refresh();
-        });
-    }
+         createProjectModal.style.display = 'none';
+         await refresh();
+       });
+     }
 
     await refresh();
 

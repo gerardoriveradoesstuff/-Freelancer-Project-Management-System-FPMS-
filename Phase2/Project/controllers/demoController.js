@@ -405,18 +405,23 @@ exports.getUserDashboard = (req, res) => {
   db.get(`SELECT Id, FullName, Role FROM Users WHERE Id = ?`, [userId], (eU, u) => {
     if (!u) return res.json(result);
     result.client = { id: u.Id, fullName: u.FullName, role: u.Role };
+    const role = String(u.Role || '').toLowerCase();
+    const projectsSql = role === 'freelancer'
+      ? `SELECT p.* FROM Project p JOIN Project_Member pm ON pm.project_id = p.Id WHERE pm.user_id = ?`
+      : `SELECT * FROM Project WHERE Client_id = ?`;
 
-    db.all(`SELECT * FROM Project WHERE Client_id = ?`, [userId], (eP, projects) => {
+    db.all(projectsSql, [userId], (eP, projects) => {
       result.projects = projects || [];
       const projectIds = result.projects.map(p => p.Id);
       const placeholders = projectIds.length ? projectIds.map(() => "?").join(",") : "";
-      const tasksQuery = projectIds.length ? `SELECT * FROM Task WHERE project_id IN (${placeholders})` : `SELECT * FROM Task WHERE 1=0`;
+      const tasksSql = projectIds.length ? `SELECT * FROM Task WHERE project_id IN (${placeholders})` : `SELECT * FROM Task WHERE 1=0`;
 
-      db.all(tasksQuery, projectIds, (eT, tasks) => {
+      db.all(tasksSql, projectIds, (eT, tasks) => {
         result.tasks = tasks || [];
         db.all(`SELECT * FROM Message WHERE sender_id = ? OR receiver_id = ? ORDER BY Sent_at DESC`, [userId, userId], (eM, msgs) => {
           result.messages = msgs || [];
-          db.all(`SELECT * FROM Payment WHERE Client_id = ?`, [userId], (ePay, pays) => {
+          const paymentsSql = role === 'freelancer' ? `SELECT * FROM Payment WHERE recipient_id = ?` : `SELECT * FROM Payment WHERE Client_id = ?`;
+          db.all(paymentsSql, [userId], (ePay, pays) => {
             result.payments = pays || [];
 
             result.stats.activeProjects = result.projects.filter(p => p.Status === 'active').length;

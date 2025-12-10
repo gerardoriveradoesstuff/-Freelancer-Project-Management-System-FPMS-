@@ -140,98 +140,12 @@
                             </div>
                         </div>
 
-                        <div class="panel" style="margin-top: 30px;">
-                            <div class="panel-header">
-                                <h3>Quick Actions</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="chip-group">
-                                    <a href="#" class="chip" id="qa-create-project">Create Project</a>
-                                    <a href="#" class="chip" id="qa-add-freelancer">Add Freelancer</a>
-                                    <a href="#" class="chip" id="qa-create-task">Create Task</a>
-                                    <a href="#" class="chip" id="qa-update-task-status">Update Task Status</a>
-                                    <a href="#" class="chip" id="qa-send-message">Send Message</a>
-                                    <a href="#" class="chip" id="qa-mark-message-read">Mark Message Read</a>
-                                    <a href="#" class="chip" id="qa-create-payment">Create Payment</a>
-                                    <a href="#" class="chip" id="qa-view-reports">View Reports</a>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         </section>
-        <section class="features-section">
-            <div class="container">
-                <h2>Actions</h2>
-                <p class="section-subtitle">Select an action to manage users, projects, tasks, payments, and reports.</p>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h3>Quick Queries</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="q-users" class="btn btn-secondary">List All Users</a>
-                            <a href="#" id="q-freelancers" class="btn btn-secondary">Get All Freelancers</a>
-                            <a href="#" id="q-projects-by-client" class="btn btn-secondary">Projects by Client</a>
-                            <a href="#" id="q-tasks-by-project" class="btn btn-secondary">Tasks by Project</a>
-                            <a href="#" id="q-messages-by-project" class="btn btn-secondary">Messages in Project</a>
-                            <a href="#" id="q-payments-by-freelancer" class="btn btn-secondary">Payments by Freelancer</a>
-                            <a href="#" id="q-reviews-by-freelancer" class="btn btn-secondary">Reviews for Freelancer</a>
-                            <a href="#" id="q-task-count-per-project" class="btn btn-secondary">Task Count per Project</a>
-                            <a href="#" id="q-average-client-ratings" class="btn btn-secondary">Average Client Ratings</a>
-                            <a href="#" id="q-projects-with-three-tasks" class="btn btn-secondary">Projects with ≥ 3 Tasks</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>User Management</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="um-insert-client" class="btn btn-primary">Insert Demo Client</a>
-                            <a href="#" id="um-insert-freelancer" class="btn btn-primary">Insert Demo Freelancer</a>
-                            <a href="#" id="um-create-project" class="btn btn-primary">Create Demo Project</a>
-                            <a href="#" id="um-add-freelancer" class="btn btn-primary">Add Freelancer to Project</a>
-                            <a href="#" id="um-delete-user" class="btn btn-secondary">Delete Demo User</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>Project Management</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="pm-create-task" class="btn btn-primary">Create Task</a>
-                            <a href="#" id="pm-update-task-status" class="btn btn-primary">Update Task Status</a>
-                            <a href="#" id="pm-send-message" class="btn btn-primary">Send Message</a>
-                            <a href="#" id="pm-mark-message-read" class="btn btn-primary">Mark Message as Read</a>
-                            <a href="#" id="pm-create-payment" class="btn btn-primary">Create Pending Payment</a>
-                            <a href="#" id="pm-delete-kickoff-message" class="btn btn-secondary">Delete Kickoff Message</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>Reports</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="rp-freelancer-task-assignments" class="btn btn-secondary">Freelancer Task Assignments</a>
-                            <a href="#" id="rp-projects-member-count" class="btn btn-secondary">Projects Member Count</a>
-                            <a href="#" id="rp-team-skills-per-project" class="btn btn-secondary">Team Skills per Project</a>
-                            <a href="#" id="rp-high-priority-todo-tasks" class="btn btn-secondary">High Priority Todo Tasks</a>
-                            <a href="#" id="rp-clients-unread-messages" class="btn btn-secondary">Clients with Unread Messages</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>Automation</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="au-assign-by-skill" class="btn btn-primary">Assign by Required Skill</a>
-                            <a href="#" id="au-create-project-default-tasks" class="btn btn-primary">Create Project + Default Tasks</a>
-                            <a href="#" id="au-send-and-mark" class="btn btn-primary">Send Message + Mark Read</a>
-                            <a href="#" id="au-complete-project-pay" class="btn btn-primary">Complete Project + Pay</a>
-                            <a href="#" id="au-pay-completed-tasks" class="btn btn-primary">Pay Only Completed Tasks</a>
-                            <a href="#" id="au-remove-inactive-freelancers" class="btn btn-secondary">Remove Inactive Freelancers</a>
-                            <a href="#" id="au-alert-overdue-task" class="btn btn.secondary">Alert Overdue Task</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
     </main>
 
     <footer class="main-footer">
@@ -284,6 +198,10 @@
             </div>
             <div class="modal-body">
                 <form id="create-project-form">
+                    <div class="form-group">
+                        <label for="project-email" id="project-email-label">Client Email</label>
+                        <input type="email" id="project-email" placeholder="client@example.com" required>
+                    </div>
                     <div class="form-group">
                         <label for="project-title">Project Title</label>
                         <input type="text" id="project-title" required>
