@@ -11,10 +11,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const BASE = location.origin.startsWith('http') ? '' : 'http://localhost:5000';
     let showAllPayments = false;
     let showAllMessages = false;
+<<<<<<< HEAD
     let showAllTasks = false;
     let actionProjectTitle = null;
     let projectFilter = 'All';
     let projectSearch = '';
+=======
+>>>>>>> origin/main
     const navLogin = document.getElementById('nav-login');
     const navRegister = document.getElementById('nav-register');
     const navDashboard = document.getElementById('nav-dashboard');
@@ -44,7 +47,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         location.href = `${BASE}/login.html`;
         return { client: {}, stats: {}, projects: [], tasks: [], messages: [], payments: [] };
       }
+<<<<<<< HEAD
       const res = await fetch(`${BASE}/api/users/${user.id}/dashboard`);
+=======
+      const res = await fetch(`${BASE}/api/demo/user/${user.id}`);
+>>>>>>> origin/main
       return res.json();
     }
 
@@ -68,6 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const projectsBody = document.getElementById("projects-table-body");
       if (projectsBody) {
+<<<<<<< HEAD
         let projectsList = (data.projects || []);
         const f = String(projectFilter || 'All').toLowerCase();
         if (f === 'active') projectsList = projectsList.filter(p => String(p.Status).toLowerCase() === 'active');
@@ -75,12 +83,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         const q = String(projectSearch || '').trim().toLowerCase();
         if (q) projectsList = projectsList.filter(p => String(p.Title || '').toLowerCase().includes(q));
         projectsBody.innerHTML = projectsList
+=======
+        projectsBody.innerHTML = (data.projects || [])
+>>>>>>> origin/main
           .map(
             p => `<tr>
               <td>${p.Title}</td>
               <td><span class="status-badge ${p.Status === 'active' ? 'status-active' : p.Status === 'completed' ? 'status-done' : 'status-pending'}">${p.Status}</span></td>
               <td>${p.Deadline || ''}</td>
               <td class="text-right">—</td>
+<<<<<<< HEAD
               <td>
                 ${String(p.UserRole || '').toLowerCase() === 'manager' || (currentUser && Number(currentUser.id) === Number(p.Client_id)) ? `<button class="btn btn-secondary border border-brand text-brand hover:bg-brandLight edit-project-btn" data-project-id="${p.Id}">Edit</button>` : ''}
                 <button class="btn btn-secondary border border-brand text-brand hover:bg-brandLight members-project-btn" data-project-id="${p.Id}" style="margin-left:8px;">Members</button>
@@ -215,6 +227,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
       const visibleTasks = allTasks.slice(0, showAllTasks ? Number.MAX_SAFE_INTEGER : 5);
       tasksBody.innerHTML = visibleTasks
+=======
+            </tr>`
+          )
+          .join("");
+      }
+
+      const tasksBody = document.getElementById("tasks-table-body");
+      if (tasksBody) {
+      tasksBody.innerHTML = (data.tasks || [])
+>>>>>>> origin/main
         .map(
           t => `<tr>
             <td>${t.title}</td>
@@ -258,6 +280,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             await refresh();
           });
         });
+<<<<<<< HEAD
 
         Array.from(document.querySelectorAll('.pay-task-btn')).forEach(btn => {
           btn.addEventListener('click', async (e) => {
@@ -326,6 +349,23 @@ document.addEventListener("DOMContentLoaded", async () => {
           .join("");
       }
 
+=======
+      }
+
+      const messagesList = document.getElementById("messages-list");
+      if (messagesList) {
+        messagesList.innerHTML = (data.messages || [])
+          .slice(0, showAllMessages ? Number.MAX_SAFE_INTEGER : 5)
+          .map(
+            m => `<li class="list-item">
+              <span>${m.Content}</span>
+              <span class="meta">${(data.projects || []).find(p => p.Id === m.project_id)?.Title || 'Direct'}</span>
+            </li>`
+          )
+          .join("");
+      }
+
+>>>>>>> origin/main
       const paymentsList = document.getElementById("payments-list");
       if (paymentsList) {
         paymentsList.innerHTML = (data.payments || [])
@@ -357,6 +397,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
+<<<<<<< HEAD
     const pf = document.getElementById('project-filter');
     if (pf) {
       pf.addEventListener('change', async () => {
@@ -627,6 +668,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
+=======
+>>>>>>> origin/main
     await refresh();
 
     bind("qa-create-project", async () => {
@@ -634,11 +677,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     bind("qa-add-freelancer", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/member`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, freelancerEmail: "alex@demo.test" }) });
     });
 
     bind("qa-create-task", async () => {
       await fetch(`${BASE}/api/demo/task`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle }) });
+=======
+      await fetch(`${BASE}/api/demo/member`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Website Redesign", freelancerEmail: "alex@demo.test" }) });
+    });
+
+    bind("qa-create-task", async () => {
+      await fetch(`${BASE}/api/demo/task`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Client Portal Upgrade" }) });
+>>>>>>> origin/main
     });
 
     bind("qa-update-task-status", async () => {
@@ -646,7 +697,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     bind("qa-send-message", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, content: "Quick action: checking in." }) });
+=======
+      await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Website Redesign", content: "Quick action: checking in." }) });
+>>>>>>> origin/main
     });
 
     bind("qa-mark-message-read", async () => {
@@ -654,7 +709,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     bind("qa-create-payment", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/payment`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, amount: 199 }) });
+=======
+      await fetch(`${BASE}/api/demo/payment`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Client Portal Upgrade", amount: 199 }) });
+>>>>>>> origin/main
     });
 
   bind("qa-view-reports", async () => {
@@ -730,7 +789,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       await refresh();
     });
     bind("um-insert-freelancer", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/member`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, freelancerEmail: "priya@demo.test" }) });
+=======
+      await fetch(`${BASE}/api/demo/member`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Website Redesign", freelancerEmail: "priya@demo.test" }) });
+>>>>>>> origin/main
       await refresh();
     });
     bind("um-create-project", async () => {
@@ -755,7 +818,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       await refresh();
     });
     bind("pm-send-message", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, content: "Kickoff meeting set." }) });
+=======
+      await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Website Redesign", content: "Kickoff meeting set." }) });
+>>>>>>> origin/main
       await refresh();
     });
     bind("pm-mark-message-read", async () => {
@@ -763,7 +830,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       await refresh();
     });
     bind("pm-create-payment", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/payment`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, amount: 120 }) });
+=======
+      await fetch(`${BASE}/api/demo/payment`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Client Portal Upgrade", amount: 120 }) });
+>>>>>>> origin/main
       await refresh();
     });
     bind("pm-delete-kickoff-message", async () => {
@@ -804,7 +875,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       await refresh();
     });
     bind("au-send-and-mark", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, content: "Automated message." }) });
+=======
+      await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Website Redesign", content: "Automated message." }) });
+>>>>>>> origin/main
       await fetch(`${BASE}/api/demo/message/read`, { method: "POST" });
       await refresh();
     });
@@ -826,10 +901,38 @@ document.addEventListener("DOMContentLoaded", async () => {
       await refresh();
     });
     bind("au-alert-overdue-task", async () => {
+<<<<<<< HEAD
       await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: actionProjectTitle, content: "Alert: Overdue task detected." }) });
+=======
+      await fetch(`${BASE}/api/demo/message`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectTitle: "Client Portal Upgrade", content: "Alert: Overdue task detected." }) });
+>>>>>>> origin/main
       await refresh();
     });
   } catch (e) {
     console.error(e);
   }
 });
+    
+    bind("view-all-payments", async () => {
+      showAllPayments = !showAllPayments;
+      const btn = document.getElementById('view-all-payments');
+      if (btn) btn.textContent = showAllPayments ? 'Collapse' : 'View All';
+      await refresh();
+    });
+
+    bind("open-inbox", async () => {
+      location.href = `${BASE}/messages.html`;
+    });
+
+    bind("view-all-projects", async () => {
+      document.getElementById('projects-table-body')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    bind("view-all-tasks", async () => {
+      document.getElementById('tasks-table-body')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    bind("q-messages-by-project", async () => {
+      const res = await fetch(`${BASE}/api/demo/query/messages-by-project`);
+      log("Messages by Project", await res.json());
+    });

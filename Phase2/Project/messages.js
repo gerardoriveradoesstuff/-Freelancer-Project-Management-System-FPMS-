@@ -24,13 +24,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
+<<<<<<< HEAD
     const resUser = await fetch(`${BASE}/api/users/${user.id}/dashboard`);
+=======
+    const resUser = await fetch(`${BASE}/api/demo/user/${user.id}`);
+>>>>>>> origin/main
     const data = await resUser.json();
     const resUsers = await fetch(`${BASE}/api/demo/query/users`);
     const users = await resUsers.json();
     const nameById = new Map();
     (users || []).forEach(u => nameById.set(u.Id, u.FullName));
 
+<<<<<<< HEAD
     const contactsList = document.getElementById('contacts-list');
     const conversationTitle = document.getElementById('conversation-title');
     const conversationList = document.getElementById('conversation-list');
@@ -121,6 +126,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderConversation();
       });
       messageInput.addEventListener('keydown', async (e) => { if (e.key === 'Enter') { e.preventDefault(); sendMessageBtn.click(); } });
+=======
+    const projById = new Map();
+    (data.projects || []).forEach(p => projById.set(p.Id, p.Title));
+
+    const messagesList = document.getElementById('messages-list');
+    if (messagesList) {
+      messagesList.innerHTML = (data.messages || [])
+        .map(m => {
+          const fromName = m.sender_id === user.id ? 'You' : (nameById.get(m.sender_id) || `User ${m.sender_id}`);
+          const toName = m.receiver_id === user.id ? 'You' : (nameById.get(m.receiver_id) || `User ${m.receiver_id}`);
+          const project = projById.get(m.project_id) || 'Direct';
+          const readBadge = m.is_read ? 'status-active' : 'status-pending';
+          const readText = m.is_read ? 'read' : 'unread';
+          return `<li class="list-item">
+            <span>${m.Content}</span>
+            <span class="meta">${fromName} → ${toName} • ${project} • ${m.Sent_at || ''}</span>
+            <span class="status-badge ${readBadge}" style="margin-left:8px;">${readText}</span>
+          </li>`;
+        })
+        .join('');
+>>>>>>> origin/main
     }
   } catch (e) {}
 });

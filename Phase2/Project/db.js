@@ -57,8 +57,11 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
         }
         // Ensure Evelyn's email is updated to gmail for existing databases
         db.run(`UPDATE Users SET Email='evelyn.park@gmail.com' WHERE FullName='Evelyn Park' AND Role='client'`);
+<<<<<<< HEAD
         db.run(`INSERT OR IGNORE INTO Users (FullName, Email, Password, Role) VALUES ('System','system@fpms.local','system','admin')`);
         // Mock seeding disabled
+=======
+>>>>>>> origin/main
     }
 });
 
