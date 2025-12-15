@@ -10,5 +10,8 @@ router.post("/login-simple", user.loginSimple);
 router.post("/reset-password-simple", user.resetPasswordSimple);
 
 router.get("/:id/dashboard", demo.getUserDashboard);
+router.get("/:userId/profile", user.getUserProfileForViewer);
+router.get("/:userId/reviews", user.getUserReviewsForViewer);
+router.post("/:userId/reviews", user.addReviewForUser);
 
 module.exports = router;

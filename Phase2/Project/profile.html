@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Messages - Freelancer Project Management System</title>
+  <title>Profile - Freelancer Project Management System</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { theme: { extend: { colors: { brand: '#6a0f0f', brandLight: '#ffe9b3', brandDark: '#4a0b0b', base: '#fffaf0' } } } };</script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <script defer src="messages.js"></script>
+  <script defer src="profile.js"></script>
 </head>
 <body>
   <header class="main-header">
@@ -34,11 +34,11 @@
       <div class="container">
         <div class="header-row">
           <div>
-            <h2>Messages</h2>
+            <h2 id="profile-title">Profile</h2>
             <p class="section-subtitle">Logged in as <span class="user-badge"><span class="avatar"></span></span></p>
           </div>
           <div class="actions">
-            <a href="dashboard.html" class="btn btn-primary bg-brand text-white hover:bg-brandDark" id="back-dashboard">Dashboard</a>
+            <a href="messages.html" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight">Back to Messages</a>
           </div>
         </div>
       </div>
@@ -46,25 +46,55 @@
 
     <section class="dashboard-section">
       <div class="container">
-        <div class="dashboard-grid" style="grid-template-columns: 320px 1fr; gap: 24px; align-items: start;">
+        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
           <div class="panel">
-            <div class="panel-header">
-              <h3>Contacts</h3>
-            </div>
+            <div class="panel-header"><h3>User</h3></div>
             <div class="panel-body">
-              <ul class="list" id="contacts-list"></ul>
+              <div id="user-summary"></div>
             </div>
           </div>
 
           <div class="panel">
-            <div class="panel-header">
-              <h3 id="conversation-title">Conversation</h3>
-            </div>
+            <div class="panel-header"><h3>Skills</h3></div>
             <div class="panel-body">
-              <ul class="list" id="conversation-list"></ul>
-              <div class="mt-4 flex items-center gap-2">
-                <input id="message-input" type="text" class="border border-brand rounded px-3 py-2 w-full" placeholder="Type a message...">
-                <button id="send-message-btn" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Send</button>
+              <ul class="list" id="skills-list"></ul>
+            </div>
+          </div>
+
+          <div class="panel" style="grid-column: 1 / span 2;">
+            <div class="panel-header"><h3>Shared Tasks</h3></div>
+            <div class="panel-body">
+              <div id="shared-tasks"></div>
+            </div>
+          </div>
+
+          <div class="panel" style="grid-column: 1 / span 2;">
+            <div class="panel-header"><h3>Reviews</h3></div>
+            <div class="panel-body">
+              <ul class="list" id="reviews-list"></ul>
+              <div class="mt-4 p-3 border border-brand rounded">
+                <h4 class="mb-2">Leave a Review</h4>
+                <div class="form-group">
+                  <label for="review-project">Project</label>
+                  <select id="review-project"></select>
+                </div>
+                <div class="form-group">
+                  <label for="review-rating">Rating</label>
+                  <select id="review-rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="review-comment">Comment</label>
+                  <input id="review-comment" type="text" class="border border-brand rounded px-3 py-2 w-full" placeholder="Write your review..." />
+                </div>
+                <div class="form-actions">
+                  <button id="submit-review" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Submit Review</button>
+                </div>
               </div>
             </div>
           </div>

@@ -414,27 +414,42 @@ exports.getUserDashboard = (req, res) => {
       result.projects = projects || [];
       const projectIds = result.projects.map(p => p.Id);
       const placeholders = projectIds.length ? projectIds.map(() => "?").join(",") : "";
-      const tasksSql = projectIds.length ? `SELECT * FROM Task WHERE project_id IN (${placeholders})` : `SELECT * FROM Task WHERE 1=0`;
 
-      db.all(tasksSql, projectIds, (eT, tasks) => {
-        result.tasks = tasks || [];
-        db.all(`SELECT * FROM Message WHERE sender_id = ? OR receiver_id = ? ORDER BY Sent_at DESC`, [userId, userId], (eM, msgs) => {
-          result.messages = msgs || [];
-          const paymentsSql = role === 'freelancer' ? `SELECT * FROM Payment WHERE recipient_id = ?` : `SELECT * FROM Payment WHERE Client_id = ?`;
-          db.all(paymentsSql, [userId], (ePay, pays) => {
-            result.payments = pays || [];
+      const proceedAfterRoles = () => {
+        const tasksSql = projectIds.length ? `SELECT * FROM Task WHERE project_id IN (${placeholders})` : `SELECT * FROM Task WHERE 1=0`;
+        db.all(tasksSql, projectIds, (eT, tasks) => {
+          result.tasks = tasks || [];
+          db.all(`SELECT * FROM Message WHERE sender_id = ? OR receiver_id = ? ORDER BY Sent_at DESC`, [userId, userId], (eM, msgs) => {
+            result.messages = msgs || [];
+            const paymentsSql = role === 'freelancer' ? `SELECT * FROM Payment WHERE recipient_id = ?` : `SELECT * FROM Payment WHERE Client_id = ?`;
+            db.all(paymentsSql, [userId], (ePay, pays) => {
+              result.payments = pays || [];
 
-            result.stats.activeProjects = result.projects.filter(p => p.Status === 'active').length;
-            result.stats.tasksInProgress = result.tasks.filter(t => t.Status === 'in_progress').length;
-            result.stats.unreadMessages = result.messages.filter(m => !m.is_read).length;
-            result.stats.pendingPaymentsAmount = result.payments
-              .filter(p => p.status === 'Pending')
-              .reduce((sum, p) => sum + (Number(p.Amount) || 0), 0);
+              result.stats.activeProjects = result.projects.filter(p => p.Status === 'active').length;
+              result.stats.tasksInProgress = result.tasks.filter(t => t.Status === 'in_progress').length;
+              result.stats.unreadMessages = result.messages.filter(m => !m.is_read).length;
+              result.stats.pendingPaymentsAmount = result.payments
+                .filter(p => p.status === 'Pending')
+                .reduce((sum, p) => sum + (Number(p.Amount) || 0), 0);
 
-            res.json(result);
+              res.json(result);
+            });
           });
         });
-      });
+      };
+
+      if (projectIds.length) {
+        const roleSql = `SELECT project_id, role FROM Project_Member WHERE user_id = ? AND project_id IN (${placeholders})`;
+        const roleParams = [userId].concat(projectIds);
+        db.all(roleSql, roleParams, (eR, rows) => {
+          const map = {};
+          (rows || []).forEach(r => { map[r.project_id] = r.role; });
+          result.projects.forEach(p => { p.UserRole = map[p.Id] || null; });
+          proceedAfterRoles();
+        });
+      } else {
+        proceedAfterRoles();
+      }
     });
   });
 };
