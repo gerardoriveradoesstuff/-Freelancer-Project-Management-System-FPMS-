@@ -34,17 +34,16 @@
             <div class="container">
                 <div class="header-row">
                     <div>
-                        <h2>Dashboard Overview</h2>
                         <p class="section-subtitle">Logged in as <span class="user-badge"><span class="avatar"></span>Evelyn Park • Client</span></p>
                     </div>
                     <div class="actions">
-                        <select>
-                            <option>All Projects</option>
-                            <option>Active</option>
-                            <option>Completed</option>
+                        <select id="project-filter">
+                            <option value="All">All Projects</option>
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
                         </select>
-                        <input type="text" placeholder="Search projects, tasks, users">
-                        <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight">Filters</a>
+                        <input type="text" id="project-search" placeholder="Search projects">
+                        <a href="#" id="create-project-btn" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Create Project</a>
                     </div>
                 </div>
             </div>
@@ -80,7 +79,7 @@
                         <div class="panel">
                             <div class="panel-header">
                                 <h3>Projects Overview</h3>
-                                <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight" id="view-all-projects">View All</a>
+                              
                             </div>
                             <div class="panel-body">
                                 <table class="table">
@@ -90,6 +89,7 @@
                                             <th>Status</th>
                                             <th>Deadline</th>
                                             <th class="text-right">Progress</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="projects-table-body"></tbody>
@@ -133,105 +133,19 @@
                         <div class="panel" style="margin-top: 30px;">
                             <div class="panel-header">
                                 <h3>Payments</h3>
-                                <a href="#" class="btn btn-secondary border border-brand text-brand hover:bg-brandLight" id="view-all-payments">View All</a>
+                                
                             </div>
                             <div class="panel-body">
                                 <ul class="list" id="payments-list"></ul>
                             </div>
                         </div>
 
-                        <div class="panel" style="margin-top: 30px;">
-                            <div class="panel-header">
-                                <h3>Quick Actions</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="chip-group">
-                                    <a href="#" class="chip" id="qa-create-project">Create Project</a>
-                                    <a href="#" class="chip" id="qa-add-freelancer">Add Freelancer</a>
-                                    <a href="#" class="chip" id="qa-create-task">Create Task</a>
-                                    <a href="#" class="chip" id="qa-update-task-status">Update Task Status</a>
-                                    <a href="#" class="chip" id="qa-send-message">Send Message</a>
-                                    <a href="#" class="chip" id="qa-mark-message-read">Mark Message Read</a>
-                                    <a href="#" class="chip" id="qa-create-payment">Create Payment</a>
-                                    <a href="#" class="chip" id="qa-view-reports">View Reports</a>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         </section>
-        <section class="features-section">
-            <div class="container">
-                <h2>Actions</h2>
-                <p class="section-subtitle">Select an action to manage users, projects, tasks, payments, and reports.</p>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h3>Quick Queries</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="q-users" class="btn btn-secondary">List All Users</a>
-                            <a href="#" id="q-freelancers" class="btn btn-secondary">Get All Freelancers</a>
-                            <a href="#" id="q-projects-by-client" class="btn btn-secondary">Projects by Client</a>
-                            <a href="#" id="q-tasks-by-project" class="btn btn-secondary">Tasks by Project</a>
-                            <a href="#" id="q-messages-by-project" class="btn btn-secondary">Messages in Project</a>
-                            <a href="#" id="q-payments-by-freelancer" class="btn btn-secondary">Payments by Freelancer</a>
-                            <a href="#" id="q-reviews-by-freelancer" class="btn btn-secondary">Reviews for Freelancer</a>
-                            <a href="#" id="q-task-count-per-project" class="btn btn-secondary">Task Count per Project</a>
-                            <a href="#" id="q-average-client-ratings" class="btn btn-secondary">Average Client Ratings</a>
-                            <a href="#" id="q-projects-with-three-tasks" class="btn btn-secondary">Projects with ≥ 3 Tasks</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>User Management</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="um-insert-client" class="btn btn-primary">Insert Demo Client</a>
-                            <a href="#" id="um-insert-freelancer" class="btn btn-primary">Insert Demo Freelancer</a>
-                            <a href="#" id="um-create-project" class="btn btn-primary">Create Demo Project</a>
-                            <a href="#" id="um-add-freelancer" class="btn btn-primary">Add Freelancer to Project</a>
-                            <a href="#" id="um-delete-user" class="btn btn-secondary">Delete Demo User</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>Project Management</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="pm-create-task" class="btn btn-primary">Create Task</a>
-                            <a href="#" id="pm-update-task-status" class="btn btn-primary">Update Task Status</a>
-                            <a href="#" id="pm-send-message" class="btn btn-primary">Send Message</a>
-                            <a href="#" id="pm-mark-message-read" class="btn btn-primary">Mark Message as Read</a>
-                            <a href="#" id="pm-create-payment" class="btn btn-primary">Create Pending Payment</a>
-                            <a href="#" id="pm-delete-kickoff-message" class="btn btn-secondary">Delete Kickoff Message</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>Reports</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="rp-freelancer-task-assignments" class="btn btn-secondary">Freelancer Task Assignments</a>
-                            <a href="#" id="rp-projects-member-count" class="btn btn-secondary">Projects Member Count</a>
-                            <a href="#" id="rp-team-skills-per-project" class="btn btn-secondary">Team Skills per Project</a>
-                            <a href="#" id="rp-high-priority-todo-tasks" class="btn btn-secondary">High Priority Todo Tasks</a>
-                            <a href="#" id="rp-clients-unread-messages" class="btn btn-secondary">Clients with Unread Messages</a>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <h3>Automation</h3>
-                        <div class="hero-buttons">
-                            <a href="#" id="au-assign-by-skill" class="btn btn-primary">Assign by Required Skill</a>
-                            <a href="#" id="au-create-project-default-tasks" class="btn btn-primary">Create Project + Default Tasks</a>
-                            <a href="#" id="au-send-and-mark" class="btn btn-primary">Send Message + Mark Read</a>
-                            <a href="#" id="au-complete-project-pay" class="btn btn-primary">Complete Project + Pay</a>
-                            <a href="#" id="au-pay-completed-tasks" class="btn btn-primary">Pay Only Completed Tasks</a>
-                            <a href="#" id="au-remove-inactive-freelancers" class="btn btn-secondary">Remove Inactive Freelancers</a>
-                            <a href="#" id="au-alert-overdue-task" class="btn btn.secondary">Alert Overdue Task</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
     </main>
 
     <footer class="main-footer">
@@ -275,6 +189,160 @@
             </div>
         </div>
     </footer>
+
+    <div id="create-project-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Project</h3>
+                <button id="close-modal-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="create-project-form">
+                    <div class="form-group">
+                        <label for="project-email" id="project-email-label">Client Email</label>
+                        <input type="email" id="project-email" placeholder="client@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="project-title">Project Title</label>
+                        <input type="text" id="project-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="project-description">Description</label>
+                        <textarea id="project-description" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="project-deadline">Deadline</label>
+                        <input type="date" id="project-deadline" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Create Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-member-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Member</h3>
+                <button id="close-add-member-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-member-form">
+                    <div class="form-group">
+                        <label for="member-email">Email</label>
+                        <input type="email" id="member-email" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="project-members-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Project Members</h3>
+                <button id="close-project-members-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul class="list" id="project-members-list"></ul>
+                <div class="mt-4">
+                    <label for="member-select">Send message to</label>
+                    <select id="member-select" class="border border-brand rounded px-3 py-2 w-full"></select>
+                </div>
+                <div class="mt-2 flex items-center gap-2">
+                    <input id="member-message-input" type="text" class="border border-brand rounded px-3 py-2 w-full" placeholder="Type a message...">
+                    <button id="send-member-message-btn" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="complete-pay-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Complete Project & Pay Freelancer</h3>
+                <button id="close-complete-pay-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="complete-pay-amount">Payment Amount</label>
+                    <input type="number" id="complete-pay-amount" min="0" step="0.01" placeholder="500.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="complete-pay-recipient">Pay To</label>
+                    <select id="complete-pay-recipient"></select>
+                </div>
+                <div class="form-actions">
+                    <button id="submit-complete-pay" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Complete & Pay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="create-task-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Task</h3>
+                <button id="close-create-task-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="task-title">Title</label>
+                    <input type="text" id="task-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="task-description">Description</label>
+                    <textarea id="task-description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-deadline">Deadline</label>
+                    <input type="date" id="task-deadline">
+                </div>
+                <div class="form-group">
+                    <label for="task-priority">Priority</label>
+                    <select id="task-priority">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="task-assignee">Assign To</label>
+                    <select id="task-assignee"></select>
+                </div>
+                <div class="form-actions">
+                    <button id="submit-create-task" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Create Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="assign-task-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Assign Task</h3>
+                <button id="close-assign-task-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Currently Assigned</label>
+                    <ul id="current-assignees-list" class="list"></ul>
+                </div>
+                <div class="form-group">
+                    <label for="assign-task-member">Assign To</label>
+                    <select id="assign-task-member" multiple size="6"></select>
+                </div>
+                <div class="form-actions">
+                    <button id="submit-assign-task" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Assign</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 <script src="dashboard.js"></script>

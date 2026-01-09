@@ -23,8 +23,13 @@
 <main>
 <section class="auth-section">
 <div class="container auth-container">
+<<<<<<< HEAD
+        <h2>Login to Your Account</h2>
+        <form action="/api/users/login-simple" method="POST" class="auth-form max-w-md mx-auto">
+=======
 <h2>Login to Your Account</h2>
 <form action="/api/users/login-simple" method="POST" class="auth-form max-w-md mx-auto">
+>>>>>>> origin/main
 <label for="email">Email</label>
 <input type="email" id="email" name="email" placeholder="Enter your email" required class="border border-brand rounded px-3 py-2 w-full">
 
@@ -33,11 +38,40 @@
 <input type="password" id="password" name="password" placeholder="Enter your password" required class="border border-brand rounded px-3 py-2 w-full">
 
 
+<<<<<<< HEAD
+        <button type="submit" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Login</button>
+        </form>
+        <div class="mt-4 text-center">
+          <button type="button" class="btn btn-secondary px-4 py-2 hover:bg-brandDark hover:text-white focus:outline-none focus:ring-2 focus:ring-brand" id="open-reset-modal" aria-label="Open password reset dialog">Reset Password</button>
+        </div>
+        <p>Don't have an account? <a href="register.html">Register here</a></p>
+        </div>
+        </section>
+
+<div id="reset-modal" class="fixed inset-0 hidden items-center justify-center bg-black/40" aria-hidden="true">
+  <div class="bg-white rounded-lg shadow-lg w-[90%] max-w-md p-6" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
+    <h3 id="reset-modal-title" class="text-xl font-semibold mb-4">Reset Password</h3>
+    <p class="text-sm mb-3">Enter your email and a new password to reset it.</p>
+    <form id="reset-request-form" class="space-y-3">
+      <label for="reset-email" class="block text-sm font-medium">Email</label>
+      <input type="email" id="reset-email" name="email" placeholder="you@example.com" required class="border border-brand rounded px-3 py-2 w-full" aria-required="true" aria-describedby="reset-email-error">
+      <p id="reset-email-error" class="text-red-600 text-sm hidden">Please enter a valid email.</p>
+      <label for="reset-new-password" class="block text-sm font-medium">New Password</label>
+      <input type="password" id="reset-new-password" name="newPassword" placeholder="Enter new password" required class="border border-brand rounded px-3 py-2 w-full" aria-required="true" aria-describedby="reset-password-error">
+      <p id="reset-password-error" class="text-red-600 text-sm hidden">Please enter a new password.</p>
+      <div class="flex items-center gap-3 mt-4">
+        <button type="submit" class="btn btn-secondary px-4 py-2 hover:bg-brandDark hover:text-white focus:outline-none focus:ring-2 focus:ring-brand" id="submit-reset-request">Reset Password</button>
+        <button type="button" class="btn btn-primary bg-brand text-white hover:bg-brandDark focus:outline-none focus:ring-2 focus:ring-brand" id="close-reset-modal">Cancel</button>
+      </div>
+    </form>
+    <div id="reset-feedback" class="mt-3 text-sm hidden"></div>
+  </div>
+=======
 <button type="submit" class="btn btn-primary bg-brand text-white hover:bg-brandDark">Login</button>
 </form>
 <p>Don't have an account? <a href="register.html">Register here</a></p>
+>>>>>>> origin/main
 </div>
-</section>
 </main>
 
 
@@ -63,6 +97,88 @@ document.querySelector('.auth-form')?.addEventListener('submit', async function(
     }
   } catch (err) {
     alert('Network error');
+  }
+});
+
+const openResetModalBtn = document.getElementById('open-reset-modal');
+const resetModal = document.getElementById('reset-modal');
+const closeResetModalBtn = document.getElementById('close-reset-modal');
+const resetRequestForm = document.getElementById('reset-request-form');
+const resetEmailInput = document.getElementById('reset-email');
+const resetEmailError = document.getElementById('reset-email-error');
+const resetFeedback = document.getElementById('reset-feedback');
+const resetNewPasswordInput = document.getElementById('reset-new-password');
+const resetPasswordError = document.getElementById('reset-password-error');
+
+function openResetModal() {
+  resetModal.classList.remove('hidden');
+  resetModal.classList.add('flex');
+  resetEmailInput.focus();
+}
+
+function closeResetModal() {
+  resetModal.classList.add('hidden');
+  resetModal.classList.remove('flex');
+}
+
+openResetModalBtn?.addEventListener('click', openResetModal);
+closeResetModalBtn?.addEventListener('click', closeResetModal);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeResetModal(); });
+
+function validEmail(v){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).toLowerCase());
+}
+
+resetRequestForm?.addEventListener('submit', async function(e){
+  e.preventDefault();
+  const email = resetEmailInput.value.trim();
+  const newPassword = resetNewPasswordInput.value;
+  if (!validEmail(email)) {
+    resetEmailError.classList.remove('hidden');
+    resetEmailInput.setAttribute('aria-invalid', 'true');
+    return;
+  }
+  resetEmailError.classList.add('hidden');
+  resetEmailInput.removeAttribute('aria-invalid');
+  if (!newPassword) {
+    resetPasswordError.classList.remove('hidden');
+    resetNewPasswordInput.setAttribute('aria-invalid', 'true');
+    return;
+  }
+  resetPasswordError.classList.add('hidden');
+  resetNewPasswordInput.removeAttribute('aria-invalid');
+  const API_BASE = location.origin.startsWith('http') ? '' : 'http://localhost:5000';
+  try {
+    const r = await fetch(`${API_BASE}/api/users/reset-password-simple`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, newPassword })
+    });
+    resetFeedback.classList.remove('hidden');
+    resetFeedback.classList.remove('text-red-600');
+    resetFeedback.classList.add('text-green-700');
+    const res = await r.json();
+    if (!r.ok) {
+      resetFeedback.classList.remove('text-green-700');
+      resetFeedback.classList.add('text-red-600');
+      resetFeedback.textContent = res.message || "Reset failed.";
+      return;
+    }
+    resetFeedback.textContent = res.message || "Password updated.";
+    const l = await fetch(`${API_BASE}/api/users/login-simple`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: newPassword })
+    });
+    const data = await l.json();
+    if (l.ok) {
+      localStorage.setItem('fpms_user', JSON.stringify(data.user));
+      location.href = `${API_BASE}/dashboard.html`;
+    }
+  } catch {
+    resetFeedback.classList.remove('hidden');
+    resetFeedback.classList.add('text-red-600');
+    resetFeedback.textContent = "Network error.";
   }
 });
 </script>

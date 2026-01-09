@@ -5,5 +5,6 @@ const auth = require("../middleware/auth");
 
 router.post("/", auth, message.sendMessage);
 router.get("/", auth, message.getMessages);
+router.post("/simple/send", message.sendMessageSimpleAndMarkRead);
 
 module.exports = router;

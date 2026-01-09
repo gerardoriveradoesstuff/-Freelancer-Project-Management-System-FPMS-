@@ -1,10 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const project = require("../controllers/projectController");
-const auth = require("../middleware/auth");
+const projectController = require('../controllers/projectController');
 
-router.post("/", auth, project.createProject);
-router.get("/", auth, project.getAllProjects);
-router.get("/mine", auth, project.getClientProjects);
+router.post('/', projectController.createProject);
+router.post('/:id/member', projectController.addProjectMember);
+router.get('/:id/members', projectController.getProjectMembers);
+router.post('/:id/complete-pay', projectController.completeProjectAndPay);
+router.post('/:id/auto-pay-completed', projectController.autoPayCompletedMembers);
+router.delete('/:id/member/:userId', projectController.removeProjectMember);
+router.post('/:id/alerts/deadlines', projectController.alertDeadlineMissed);
 
 module.exports = router;

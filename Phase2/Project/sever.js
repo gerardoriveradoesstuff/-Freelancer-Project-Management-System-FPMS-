@@ -18,5 +18,12 @@ app.use("/api/demo", require("./routes/demoRoutes"));
 // Serve frontend files from Phase2/Project directory
 app.use(express.static(__dirname));
 
+<<<<<<< HEAD
+const PORT = process.env.PORT ? Number(process.env.PORT) : 5000;
+app.listen(PORT, () => {
+  console.log(`FPMS server listening on http://localhost:${PORT}`);
+});
+=======
 const PORT = 5000;
 app.listen(PORT);
+>>>>>>> origin/main
